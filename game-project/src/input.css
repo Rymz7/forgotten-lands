@@ -1,1 +1,104 @@
 @import "tailwindcss";
+
+/* Kalau class di index.html nggak kedeteksi pas build, aktifin baris ini
+   (sesuaikan path relatif dari file css ini ke index.html): */
+/* @source "../index.html"; */
+
+/* Palet warna Forgotten Lands */
+@theme {
+    --color-midnight: #0b0a1f;      /* background gelap */
+    --color-moon: #e4ecff;          /* putih bulan */
+    --color-arcane: #8a7bd1;        /* border tombol sekunder */
+    --color-arcane-light: #b9a9ff;  /* border pas hover */
+}
+
+@layer base {
+    /* Fallback kalau gambar background gagal load */
+    html {
+        background-color: var(--color-midnight);
+        color-scheme: dark; /* dropdown & slider ikut tampilan gelap */
+    }
+
+    /* Tailwind v4 bikin kursor tombol jadi panah biasa, ini balikin jadi tangan */
+    button:not(:disabled),
+    a[href],
+    select,
+    input[type="range"],
+    input[type="checkbox"] {
+        cursor: pointer;
+    }
+
+    /* Chrome autofill biasanya bikin input jadi putih/kuning, ini biar tetap gelap */
+    input:-webkit-autofill {
+        -webkit-text-fill-color: var(--color-moon);
+        caret-color: var(--color-moon);
+        box-shadow: 0 0 0 1000px var(--color-midnight) inset;
+    }
+}
+
+@layer components {
+
+    /* Tombol utama: Play, New Game, Login (submit), Done */
+    .btn-primary {
+        @apply border border-moon bg-moon px-8 py-4 text-center text-sm font-bold uppercase tracking-[0.2em] text-midnight;
+        @apply shadow-[0_6px_20px_rgba(20,8,50,0.55)] transition duration-200 ease-out;
+        @apply hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_0_24px_rgba(228,236,255,0.6)];
+        @apply active:translate-y-0 active:scale-[0.98];
+        @apply focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-moon;
+    }
+
+    /* Tombol sekunder: Settings, Login / Create Account, Saved Game, Back, Reset */
+    .btn-secondary {
+        @apply border border-arcane bg-midnight/45 px-8 py-4 text-center text-sm font-bold uppercase tracking-[0.2em] text-violet-100;
+        @apply transition duration-200 ease-out;
+        @apply hover:-translate-y-0.5 hover:border-arcane-light hover:bg-violet-900/60 hover:text-white hover:shadow-[0_0_20px_rgba(138,123,209,0.5)];
+        @apply active:translate-y-0 active:scale-[0.98];
+        @apply focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-300;
+    }
+
+    /* Tombol key binding di Settings */
+    .btn-key {
+        @apply min-w-24 border border-violet-400/60 bg-purple-950/50 px-4 py-2 text-center;
+        @apply transition duration-200 ease-out;
+        @apply hover:border-moon hover:bg-violet-900/70 hover:text-white hover:shadow-[0_0_14px_rgba(138,123,209,0.45)];
+        @apply active:scale-95;
+        @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-300;
+    }
+
+    /* Tombol tutup (✕) */
+    .btn-close {
+        @apply px-3 py-1 text-xl text-violet-300 transition duration-200 ease-out;
+        @apply hover:scale-125 hover:text-white;
+        @apply focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-300;
+    }
+
+    /* Slot save yang udah ada isinya (bisa diklik) */
+    .slot {
+        @apply flex w-full items-center justify-between gap-4 border border-arcane bg-midnight/45 px-6 py-4;
+        @apply transition duration-200 ease-out;
+        @apply hover:-translate-y-0.5 hover:border-arcane-light hover:bg-violet-900/60 hover:shadow-[0_0_20px_rgba(138,123,209,0.5)];
+        @apply active:translate-y-0 active:scale-[0.98];
+        @apply focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet-300;
+    }
+
+    /* Slot save kosong (nggak bisa diklik) */
+    .slot-empty {
+        @apply flex w-full cursor-not-allowed items-center justify-between gap-4 border border-dashed border-violet-400/40 px-6 py-4 text-violet-300/50;
+    }
+}
+
+/* Matikan gerakan buat yang ngaktifin "reduce motion" di sistem operasinya */
+@media (prefers-reduced-motion: reduce) {
+    .btn-primary:hover,
+    .btn-secondary:hover,
+    .btn-key:hover,
+    .btn-close:hover,
+    .slot:hover,
+    .btn-primary:active,
+    .btn-secondary:active,
+    .btn-key:active,
+    .slot:active {
+        translate: none;
+        scale: none;
+    }
+}
